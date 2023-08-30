@@ -8,7 +8,6 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.addons.transition.FlxTransitionableState;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -38,27 +37,27 @@ class OptionsState extends MusicBeatState
 	function openSelectedSubstate(label:String) {
 		switch(label) {
 			case 'Note Colors':
-				#if android
+				#if mobile
 				removeVirtualPad();
 				#end
 				openSubState(new options.NotesSubState());
 			case 'Controls':
-				#if android
+				#if mobile
 				removeVirtualPad();
 				#end
 				openSubState(new options.ControlsSubState());
 			case 'Graphics':
-				#if android
+				#if mobile
 				removeVirtualPad();
 				#end
 				openSubState(new options.GraphicsSettingsSubState());
 			case 'Visuals and UI':
-				#if android
+				#if mobile
 				removeVirtualPad();
 				#end
 				openSubState(new options.VisualsUISubState());
 			case 'Gameplay':
-				#if android
+				#if mobile
 				removeVirtualPad();
 				#end
 				openSubState(new options.GameplaySettingsSubState());
@@ -102,27 +101,19 @@ class OptionsState extends MusicBeatState
 		selectorRight = new Alphabet(0, 0, '<', true);
 		add(selectorRight);
 
-		changeSelection();
-		ClientPrefs.saveSettings();
-
-		#if android
-		var tipText:FlxText = new FlxText(10, 12, 0, 'Press X to Go In Android Controls Menu', 16);
-		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		tipText.borderSize = 2;
-		tipText.scrollFactor.set();
-		add(tipText);
-		var tipText:FlxText = new FlxText(10, 32, 0, 'Press Y to Go In Hitbox Settings Menu', 16);
-		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		tipText.borderSize = 2;
+		#if mobile
+		var tipText:FlxText = new FlxText(10, FlxG.height - 24, 0, 'Press C to customize your mobile controls', 16);
+		tipText.setFormat(Paths.font('vcr.ttf'), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		tipText.borderSize = 2.4;
 		tipText.scrollFactor.set();
 		add(tipText);
 		#end
 
 		changeSelection();
 		ClientPrefs.saveSettings();
-
-		#if android
-		addVirtualPad(UP_DOWN, A_B_X_Y);
+		
+		#if mobile
+		addVirtualPad(UP_DOWN, A_B_C);
 		#end
 
 		super.create();
@@ -148,21 +139,18 @@ class OptionsState extends MusicBeatState
 			MusicBeatState.switchState(new MainMenuState());
 		}
 
-		#if android
-		if (_virtualpad.buttonX.justPressed) {
-			FlxTransitionableState.skipNextTransIn = true;
-			FlxTransitionableState.skipNextTransOut = true;
-			MusicBeatState.switchState(new android.AndroidControlsMenu());
-		}
-		if (_virtualpad.buttonY.justPressed) {
-			removeVirtualPad();
-			openSubState(new android.HitboxSettingsSubState());
-		}
-		#end
-
 		if (controls.ACCEPT) {
 			openSelectedSubstate(options[curSelected]);
 		}
+		
+		#if mobile
+		if (virtualPad.buttonC.justPressed) {
+		  #if mobile 
+		  removeVirtualPad();
+		  #end
+		  openSubState(new mobile.MobileControlsSubState());
+		}
+		#end
 	}
 	
 	function changeSelection(change:Int = 0) {

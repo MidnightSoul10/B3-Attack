@@ -86,11 +86,10 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-
-		#if android
-		FlxG.android.preventDefaultKeys = [BACK];
-		#end
-
+	  #if android
+	  FlxG.android.preventDefaultKeys = [BACK];
+	  #end
+	  
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
@@ -132,14 +131,14 @@ class TitleState extends MusicBeatState
 		swagShader = new ColorSwap();
 		super.create();
 
-		FlxG.save.bind('funkin' , CoolUtil.getSavePath());
+		FlxG.save.bind('funkin', CoolUtil.getSavePath());
 
 		ClientPrefs.loadPrefs();
 
 		#if CHECK_FOR_UPDATES
 		if(ClientPrefs.checkForUpdates && !closedState) {
 			trace('checking for update');
-			var http = new haxe.Http("https://raw.githubusercontent.com/MaysLastPlayGithub/FNF-PsychEngine/main/gitVersion.txt");
+			var http = new haxe.Http("https://raw.githubusercontent.com/ShadowMario/FNF-PsychEngine/main/gitVersion.txt");
 
 			http.onData = function (data:String)
 			{
@@ -329,15 +328,15 @@ class TitleState extends MusicBeatState
 		logoBl.shader = swagShader.shader;
 
 		titleText = new FlxSprite(titleJSON.startx, titleJSON.starty);
-		#if (desktop || android && MODS_ALLOWED)
-		var path = SUtil.getPath() + "mods/" + Paths.currentModDirectory + "/images/titleEnter.png";
+		#if (desktop && MODS_ALLOWED)
+		var path = "mods/" + Paths.currentModDirectory + "/images/titleEnter.png";
 		//trace(path, FileSystem.exists(path));
 		if (!FileSystem.exists(path)){
-			path = SUtil.getPath() + "mods/images/titleEnter.png";
+			path = "mods/images/titleEnter.png";
 		}
 		//trace(path, FileSystem.exists(path));
 		if (!FileSystem.exists(path)){
-			path = SUtil.getPath() + "assets/images/titleEnter.png";
+			path = "assets/images/titleEnter.png";
 		}
 		//trace(path, FileSystem.exists(path));
 		titleText.frames = FlxAtlasFrames.fromSparrow(BitmapData.fromFile(path),File.getContent(StringTools.replace(path,".png",".xml")));

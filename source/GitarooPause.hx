@@ -47,10 +47,6 @@ class GitarooPause extends MusicBeatState
 
 		changeThing();
 
-		#if android
-		addVirtualPad(LEFT_RIGHT, A);
-		#end
-
 		super.create();
 	}
 
@@ -67,11 +63,11 @@ class GitarooPause extends MusicBeatState
 			}
 			else
 			{
-				//PlayState.usedPractice = false;
+				PlayState.usedPractice = false;
 				PlayState.changedDifficulty = false;
 				PlayState.seenCutscene = false;
 				PlayState.deathCounter = 0;
-				PlayState.instance.cpuControlled = false;
+				PlayState.cpuControlled = false;
 				MusicBeatState.switchState(new MainMenuState());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 			}

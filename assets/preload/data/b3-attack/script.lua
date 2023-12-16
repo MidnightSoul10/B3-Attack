@@ -1,6 +1,6 @@
 local fakeNotes = {}
-function getModFolder()
-	local dir = 'mods'
+function getPath()
+	local dir = 'assets'
 	if #currentModDirectory > 0 and currentModDirectory ~= nil then
 		dir = dir..'/'..currentModDirectory
 	end
@@ -26,7 +26,7 @@ local fakeStrumDirOffCon = {
 }
 howManLoop = 0
 function onCreate()
-	local json = dofile('mods/' .. currentModDirectory .. '/scripts/JSONLIB.lua')
+	local json = dofile('assets/' .. currentModDirectory .. '/scripts/script.lua')
 	jsonTble = json.parse(getTextFromFile('data/' .. songPath .. '/' .. songPath .. '-other.json'))
 	for i = 1, #jsonTble.song.notes do 
 		if #jsonTble.song.notes[i].sectionNotes > 0 then
